@@ -113,11 +113,11 @@ This is messy because it involves hard-coding test-related logic into the app, a
 
 In AngularJS, the DI API required registering services to stringly-typed names. This comes with the limitation that two services can't have the same human-readable "name" and that there's no source of truth cataloguing what names are used within the DI container.
 
-This RFC solves these issues by making names unique and not stringly-typed. In addition, using unique tokens makes it more natural to support userland dependency registration.
+This RFC solves these issues by making names unique and not stringly-typed. In addition, using unique tokens makes it more natural to support userland dependency registration, and it makes it easier to support Flow type checking.
 
 ### Factories instead of app.configure
 
-It's possible to inject configuration using the dependency-less plugin pattern:
+Injecting configuration can be done by registering another dependency:
 
 ```js
 // config.js
@@ -128,7 +128,7 @@ import config from './config';
 app.register(SomeConfigToken, config);
 ```
 
-We opt to provide a helper to reduce the amount of boilerplate in config files.
+We opt to provide a helper `.configure` method to reduce the amount of boilerplate in config files.
 
 ---
 
