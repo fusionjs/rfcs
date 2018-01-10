@@ -18,7 +18,7 @@ The impementation involves three main concerns:
 
 * Static asset pathing
 * `ctx.url` re-write
-* Prefix handling for `fusion-plugin-reactroute`
+* Prefix handling for `fusion-plugin-react-router`
 
 ### Static asset pathing
 
@@ -31,11 +31,10 @@ We can provide the route prefix in a similar fashion, and update static asset pa
 * Passing `ROUTE_PREFIX` as an environment variable that can be accessed via the environment variables plugin.
 * Ensure that the default static asset path incorporates the route prefix (e.g. '/privacy/_static', where '/privacy' is the route prefix).
 
-In production, this will likely be supplied via an app's `pinocchio.yaml` configuration file:
+In production, this will likely be supplied via an app's configuration file.  For example, this may include something like:
 
 ```
-website:
-  command: 'ROUTE_PREFIX="/privacy" FRAMEWORK_STATIC_ASSET_PATH="https://someuuid.cloudfront.net/uberprivacy" npm start'
+command: 'ROUTE_PREFIX="/privacy" FRAMEWORK_STATIC_ASSET_PATH="https://someuuid.cloudfront.net/uberprivacy" npm start'
 ```
 
 Ideally, as this is being provided as an environment variable, we should scope this to the `fusion-cli` and ensure it is not exposed to user land.
