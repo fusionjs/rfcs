@@ -14,14 +14,6 @@ Another benefit is presumably development is done in a modern browser, so the op
 
 A possible implementation strategy (described in the following section) would also involve whole-program analysis, rather than the piecemeal, file-based `babel-loader` transpilation approach that is currently used. This change might make transpilation-related, program-level optimizations, such as polyfilling and helper deduplication easier to implement.
 
-Why are we doing this? What use cases does it support? What is the expected
-outcome?
-
-Please focus on explaining the motivation so that if this RFC is not accepted,
-the motivation could be used to develop alternative solutions. In other words,
-enumerate the constraints you are trying to solve without coupling them too
-closely to the solution you have in mind.
-
 # Detailed design
 
 The key idea is to transpile code *after* bundling.
