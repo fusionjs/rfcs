@@ -22,7 +22,7 @@ The key idea is to transpile code *after* bundling.
 
 In development, the general process would go something like this:
 
-0. Build is completed, creating an untranspiled bundle (`0-contenthash-raw.js`, `0-contenthash.raw.js`, etc.)
+0. Build is completed, creating an untranspiled bundle (`0-contenthash-raw.js`, `1-contenthash.raw.js`, etc.)
 1. Request from browser is recieved
 2. UA is parsed to determine browser information
 3. Browser information is passed to `babel-preset-env`, generating a list of required transforms/polyfills
@@ -61,11 +61,11 @@ This is essentially a less generalized solution of this RFC. Implementing this w
 
 # Adoption strategy
 
-TODO
+This is a largely under-the-hood change with little to no developer-facing consequences. A minor version bump to fusion-cli should be sufficient.
 
 # How we teach this
 
-TODO
+Documenting the differences between development and production will be important (particularly if production browser support ranges are configurable).
 
 # Unresolved questions
 
