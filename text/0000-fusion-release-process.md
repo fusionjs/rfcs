@@ -44,9 +44,9 @@ Even though we did not bootstrap with Lerna, we can take advantage of their publ
 
 There's a fair amount of complexity involved in our current fusion-release repository, and it will likely grow over time. Pieces that add complexity include usage of a topological sorting library, as well as a pipeline which defines the entire testing pipeline. This pipeline is currently not generated due to slight differences between repos, and will need to be updated as we add additional plugins and test suites. One alternative is creating a yarn script for each plugin which will allow us to shell out to that command per repository. E.g., yarn run release-verification.
 
-### Machine cost
+### Build time
 
-Bundling FusionJS as a monorepo results in a 5GB docker image along with dozens of hours of machine time. Compared to engineering cost the price is miniscule, but there is a cost to running all of these compute hours on AWS (50 machine hours being $1 per commit to test on spot instances or so). We would ideally receive a budget for something like "500 compute hours per pull request" and not have to worry about cost at all.
+Bootstraping a monorepo from multiple repositories can take a long time. We currently spend about 30 minutes bootstrapping and uploading a 5GB docker image. Luckily individual repo CI is still fast and can complete within a matter of minutes. There may be some ways to improve this bootstrap time, but that needs to be investigated.
 
 # Alternatives
 
@@ -60,7 +60,7 @@ We would stop publishing packages individually, and instead lockstep the entire 
 
 ### Verification pipeline kickoff
 
-We would trigger a verification pipeline job to be run at a scheduled interval, or every commit to master. We should also add integration so we are notified of breakages.
+We would trigger a verification pipeline job to be run at a scheduled interval, as well as every commit to master across all FusionJS repositories. Integrations via email, uchat and dashboards will notify us of build status and breakages.
 
 # How we teach this
 
