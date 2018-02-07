@@ -8,7 +8,7 @@ A better process for release quality verification and publishing for the FusionJ
 
 # Motivation
 
-Currently FusionJS packages live within multiple repositories and it's hard to tell the state of the FusionJS core ecosystem. We often release breaking changes in one package, but don't get around to upgrading dependent packages, or are aware of cross-package breakage that occurs. Our lack of cross-repo verification often leads to a fragmented and broken ecosystem, with no signal as to the overall current state.
+Currently FusionJS packages live within multiple repositories and it's hard to determine the state of the FusionJS core ecosystem. We often release breaking changes in one package, but don't get around to upgrading dependent packages, or are aware of cross-package breakage that occurs. Our lack of cross-repo verification often leads to a fragmented and broken ecosystem, with no signal as to the overall current state.
 
 The goal of this RFC is to define a verification and release process, certifying FusionJS release quality, and allowing for faster and higher quality releases.
 
@@ -16,7 +16,7 @@ The goal of this RFC is to define a verification and release process, certifying
 
 ### On-demand monorepo construction
 
-We will continue to develop individual FusionJS plugins and libraries in individual repositories. This gives us fast development cycles and avoids monorepo pain points like long boostrap time. A new CI job will exist which will be triggered for every commit going into master across all repositories. This job will construct a monorepo and run tests against the latest HEAD for all FusionJS repositories.
+We will continue to develop individual FusionJS plugins and libraries within individual repositories. This gives us fast development cycles and avoids monorepo pain points like long boostrap time. A new CI job will exist which will be triggered for every commit going into master across all repositories. This job will construct a monorepo and run tests against the latest HEAD for all FusionJS repositories.
 
 We will have the best of a multirepo world, along with tooling that gives us the benefits of a monorepo.
 
@@ -62,9 +62,19 @@ We would stop publishing packages individually, and instead lockstep the entire 
 
 We would trigger a verification pipeline job to be run at a scheduled interval, as well as every commit to master across all FusionJS repositories. Integrations via email, uchat and dashboards will notify us of build status and breakages.
 
-# How we teach this
+### How frequently do releases happen?
 
-Document our release processes.
+First and foremost we should strive to keep master stable, and releasable at any time. Whether that's a patch release that we decide to release every few days, or a breaking change with codemods, we should always be able to ship when needed. This will keep us responsive and able to fix bugs in a timely manner without introducing new bugs.
+
+Outside of our releass we will also plan on having milestones for features, and perform a release when that milestone is done. With comprehensive testing and diligence around writing codemods, we should generally be able to avoid the case where a breaking change in master would prevent us from shipping a new version. In the case this does happen, branching off at an earlier release for an individual package is always an option.
+
+### Impact of open source contributions against private repositories
+
+We will always conduct ourselves in a way to do what is best for the open source codebase. If a breaking change that impacts internal code would be best for the framework, we should accept it, assuming that the code meets our guidelines and codemod requirements.
+
+### How does greenkeeping propagate to existing consumers of FusionJS
+
+Greenkeeping will be painless due to an improved focus on release quality, semvar adherence and codemod diligence. We will provide a CLI to automatically upgrade FusionJS packages and run the associated codemods for that upgrade. Codemods should be placed in a folder for each major release, and should ideally live within each individual repository.
 
 # Unresolved questions
 
