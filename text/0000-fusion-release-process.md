@@ -72,7 +72,18 @@ We will always conduct ourselves in a way to do what is best for the open source
 
 ### How does greenkeeping propagate to existing consumers of FusionJS
 
-Greenkeeping will be painless due to an improved focus on release quality, semvar adherence and codemod diligence. We will provide a CLI to automatically upgrade FusionJS packages and run the associated codemods for that upgrade. Codemods should be placed in a folder for each major release, and should ideally live within each individual repository.
+Greenkeeping will be painless due to an improved focus on release quality, semvar adherence and codemod diligence. We will provide a CLI tool to automatically upgrade FusionJS packages and run the associated codemods for that upgrade. Codemods should be placed in a folder for each major release, and should ideally live within each individual repository.
+
+Codemods directory specification:
+
+```
+fusion-core/
+└── codemods/
+    ├── 1.0.0/
+    |   └── change-token-name.js
+    └── 2.0.0/
+        └── some-other-codemod.js
+```
 
 # Unresolved questions
 
