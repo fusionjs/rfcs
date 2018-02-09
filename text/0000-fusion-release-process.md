@@ -32,17 +32,9 @@ Due to containerization, this project should be able to support both open source
 
 We will verify releases by triggering a verification pipeline which runs unit tests, linters, flow and integration tests across the HEAD of all packages. This pipeline would be run at a scheduled interval, as well as every commit to master across all FusionJS repositories. Only by running on HEAD can we discern whether or not we are safe to release or not. Integrations via email, uchat and dashboards will notify us of build status and breakages.
 
-### Release lockstep publishing
+### Release publishing
 
-We will stop publishing packages individually, and instead lockstep the entire release, leveraging CI for publishing. Assuming that all tests pass, we can kick off a pipeline job which will use our built monorepo to publish packages. This will save engineers time as they don't need to open pull requests to every repository to publish. One possible flow of how this would work:
-
-* An engineer manually kicks off a Buildkite pipeline to publish.
-* The engineer is prompted to choose the next version using [Buildkite input fields](https://buildkite.com/docs/pipelines/block-step#select-input-attributes), but a default version is provided as well.
-* Verification is performed on the release version, doing what we can to ensure that breaking changes enforce the next major version bump.
-* When the user presses the build button, we run all tests. If the tests fail the pipeline will not be allowed to perform a version publish.
-* The pipeline builds a topologically sorted list of packages. For each batch of packages the pipeline will open a pull request against the repo with the package bump.
-* The pipeline will monitor status, and automatically land the version bump when tests pass.
-* Once the packages are available in the NPM registry we continue down the list of sorted packages, until everything has been published.
+We will follow semvar for all releases. Breaking changes will be a major version upgrade, and we will ship codemods where possible.
 
 # Drawbacks
 
