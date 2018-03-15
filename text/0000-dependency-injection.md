@@ -27,10 +27,18 @@ import createToken from './create-token';
 export const LoggerToken = createToken('logger');
 
 // plugin.js (dependency declaration)
-import {withDependencies} from 'fusion-core';
+import {createPlugin} from 'fusion-core';
 import {LoggerToken as logger} from 'fusion-tokens';
 
-export default withDependencies({logger})(({logger}) => new Service({logger}));
+export default createPlugin({
+  deps: {logger},
+  provides: ({logger}) => new Service({logger}),
+  middleware: ({logger}, service) => {
+    return (ctx, next) => {
+      return next();
+    }
+  },
+});
 
 // main.js (dependency registration)
 import {LoggerToken} from 'fusion-tokens';
@@ -46,7 +54,7 @@ export default () => {
 
 A token is a unique value with a unique [opaque type](https://en.wikipedia.org/wiki/Opaque_data_type). You can think of a token like you think about ES6 symbols: they are an unique identifier that can refer to one and only one service implementation at any given time. This RFC proposes implementing a token as function that throws the user-friendly error when a dependency resolution error occurs.
 
-All tokens would be created via the `createToken` function and type-annotated with Flow in the registry where they reside.
+All tokens would be created via the `createToken` function and type-annotated with Flow in the registry or package where they reside.
 
 We propose creating a package called `fusion-tokens` to serve as the registry for open source tokens, as curated by the FusionJS team. This package would include tokens such as `LoggerToken`, `ReduxToken`, and other tokens that are relavant to plugins that are maintained by the FusionJS team.
 
@@ -54,18 +62,21 @@ Plugins can be registries for their own tokens (for example, for configuration t
 
 ### Dependency declaration
 
-Dependencies are injected via a higher order function:
+Dependencies are declared via a `deps` property:
 
 ```js
-withDependencies({
-  a: AToken,
-  b: BToken,
-})(({a, b}) => {
-  return new Service({a, b});
+createPlugin({
+  deps: {
+    a: AToken,
+    b: BToken,
+  },
+  provides({a, b}) {
+    return new Service({a, b});
+  },
 });
 ```
 
-The `withDependencies` function maps a variable name (such as `a` or `b` in the example above), to a service (represented by a token). When a service implementation is registered to a token, it becomes available as an injected dependency in the higher order function.
+The `deps` object maps a variable name (such as `a` or `b` in the example above), to a service (represented by a token). When a service implementation is registered to a token, it becomes available as an injected dependency in the `provides` function.
 
 ### Dependency registration
 
@@ -73,14 +84,6 @@ Dependencies are registered to tokens:
 
 ```js
 app.register(LoggerToken, Logger);
-```
-
-### Helpers
-
-We propose a `app.configure` helper method to allow easy injection of constants such as configuration data.
-
-```js
-app.configure(DbConnectionString, dbConfig.connectionString);
 ```
 
 ---
@@ -103,7 +106,7 @@ import Logger from 'some-logger';
 
 export default ({LoggerMock}) => {
   const app = new App();
-  app.plugin(LoggerMock || Logger);
+  app.register(LoggerMock || Logger);
 };
 ```
 
@@ -115,27 +118,9 @@ In AngularJS, the DI API required registering services to stringly-typed names. 
 
 This RFC solves these issues by making names unique and not stringly-typed. In addition, using unique tokens makes it more natural to support userland dependency registration, and it makes it easier to support Flow type checking.
 
-### Factories instead of app.configure
-
-Injecting configuration can be done by registering another dependency:
-
-```js
-// config.js
-export default () => someConfig;
-
-// main.js
-import config from './config';
-app.register(SomeConfigToken, config);
-```
-
-We opt to provide a helper `.configure` method to reduce the amount of boilerplate in config files.
-
 ---
 
 # Unresolved questions
 
-* Should `app.register` support token-less registration? Why not just `app.register(createToken(''), thing)`?
-* Feasibility of codemods; how easy is it to migrate userland plugins?
 * Reducing verbosity (related to flow.js, etc)
 * Type safety when overriding plugins (i.e. disallowing coercion to union types)
-* why `createToken` and not just use `Symbol`?
