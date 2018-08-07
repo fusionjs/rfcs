@@ -48,9 +48,11 @@ const b = createUniversalId();
 
 (after)
 ```js
-const a = "__fusion_uid_0";
-const b = "__fusion_uid_1";
+const a = "__fusion_uid_4zwL_0";
+const b = "__fusion_uid_4zwL_1";
 ```
+
+Generated IDs should be based on file path and source order to ensure determinsitic builds.
 
 ## Build-time constraints
 
@@ -88,8 +90,8 @@ const b = createUniversalSymbol();
 
 (after)
 ```js
-const a = Symbol.for("__fusion_uid_0");
-const b = Symbol.for("__fusion_uid_1");
+const a = Symbol.for("__fusion_4zwL_0");
+const b = Symbol.for("__fusion_4zwL_1");
 ```
 
 - Symbol serialization would be `Symbol.keyFor(symbol)`
