@@ -64,7 +64,7 @@ const serializableParam = {
 };
 
 const swSourceCode = serviceWorkerTemplate(serializableParam);
-// swSourceCode is a string containing a JS program that invokes the default exported function from "src/sw-handlers.js" with `serializableParam`
+// swSourceCode is a string containing a JS program/bundle that invokes the default exported function from "src/sw-handlers.js" with `serializableParam`
 ```
 
 2) New entry file: `src/sw-handlers.js`:
