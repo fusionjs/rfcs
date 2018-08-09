@@ -10,9 +10,9 @@ Service worker support in Fusion
 
 Most developers will want to use a default service worker implementation (as defined in the SW plugin) without modification. This is how it is used in this case:
 
-Note: Fusion CLI is hardcoded to look for a `src/sw-logic.js` file (akin to how it uses `src/main.js`).
+Note: Fusion CLI is hardcoded to look for a `src/sw-handlers.js` file (akin to how it uses `src/main.js`).
 ```js
-// src/sw-logic.js
+// src/sw-handlers.js
 
 import {serviceWorkerLogic} from "fusion-plugin-sw";
 
@@ -53,29 +53,32 @@ closely to the solution you have in mind.
 
 Two low-level APIs:
 
-1) New entry file: `src/sw-logic.js`:
-```js
-// src/sw-logic.js
-
-export default ({criticalScripts, staticAssets}) => {
-  // `criticalScripts` - an array of string paths that should be pre-cached
-  // `staticAssets`    - an array of string paths that are cacheable
-
-  self.addEventListener("install", /* ... */);
-  self.addEventListener("fetch", /* ... */);
-  // ...
-}
-```
-
-2) New virtual module `serviceWorkerTemplate` in public API:
+1) New virtual module `serviceWorkerTemplate` in public API:
 
 ```js
 import {serviceWorkerTemplate} from "fusion-core";
 
-const swSourceCode = serviceWorkerTemplate({
+const serializableParam = {
   criticalScripts: [/* ... */],
   staticAssets: [/* ... */],
-});
+};
+
+const swSourceCode = serviceWorkerTemplate(serializableParam);
+// swSourceCode is a string containing a JS program that invokes the default exported function from "src/sw-handlers.js" with `serializableParam`
+```
+
+2) New entry file: `src/sw-handlers.js`:
+```js
+// src/sw-handlers.js
+
+export default (deserializedParam) => {
+  // deserializedParam is equivalent to `JSON.parse(JSON.stringify(serializableParam))`
+
+  // Arbitrary logic goes here...
+  self.addEventListener("install", /* ... */);
+  self.addEventListener("fetch", /* ... */);
+  // ...
+}
 ```
 
 <!--
