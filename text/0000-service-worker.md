@@ -22,7 +22,7 @@ export default serviceWorkerLogic;
 Add registration code to app:
 ```js
 // src/main.js
-import {registerServiceWorker, SWPlugin} from "fusion-plugin-sw";
+import {ServiceWorkerPlugin} from "fusion-plugin-sw";
 
 if (__BROWSER__ && !__DEV__) {
   registerServiceWorker();
@@ -31,7 +31,7 @@ if (__BROWSER__ && !__DEV__) {
 export default () => {
   const app = new App(/* ... */);
   if (!__DEV__) {
-    app.register(SWPlugin);
+    app.register(ServiceWorkerPlugin);
   }
   // ...
   return app;
