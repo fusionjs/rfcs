@@ -24,10 +24,6 @@ Add registration code to app:
 // src/main.js
 import {ServiceWorkerPlugin} from "fusion-plugin-sw";
 
-if (__BROWSER__ && !__DEV__) {
-  registerServiceWorker();
-}
-
 export default () => {
   const app = new App(/* ... */);
   if (!__DEV__) {
