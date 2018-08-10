@@ -30,7 +30,9 @@ if (__BROWSER__ && !__DEV__) {
 
 export default () => {
   const app = new App(/* ... */);
-  app.register(SWPlugin);
+  if (!__DEV__) {
+    app.register(SWPlugin);
+  }
   // ...
   return app;
 }
