@@ -8,15 +8,19 @@ Service worker support in Fusion
 
 # Basic example
 
-Most developers will want to use a default service worker implementation (as defined in the SW plugin) without modification. This is how it is used in this case:
+Most developers will want to use a default service worker event handlers (as defined in the SW plugin) without modification. This is how it is used in this case:
 
 Note: Fusion CLI is hardcoded to look for a `src/sw-handlers.js` file (akin to how it uses `src/main.js`).
 ```js
 // src/sw-handlers.js
 
-import {serviceWorkerLogic} from "fusion-plugin-sw";
+import {getHandlers} from "fusion-plugin-sw";
 
-export default serviceWorkerLogic;
+export default assetInfo => {
+  const {onFetch, onInstall} = getHandlers(assetInfo);
+  self.addEventListener("install", onInstall);
+  self.addEventListener("fetch", onFetch);
+};
 ```
 
 Add registration code to app:
